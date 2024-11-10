@@ -790,44 +790,61 @@ static TMParserMapGroup group_VERILOG[] = {
 
 static TMParserMapEntry map_SYSVERILOG[] = {
 	// Verilog and SystemVerilog
-	{'c', tm_tag_variable_t},  // constant
-	{'d', tm_tag_variable_t},  // define
-	{'e', tm_tag_typedef_t},   // event
+	{'c', tm_tag_field_t},     // constant (parameter, specparam, localparam, enum values)
+	{'d', tm_tag_macro_t},     // define (macro)
+	{'e', tm_tag_undef_t},/**/ // event -- REMOVED; was included in Verilog
 	{'f', tm_tag_function_t},  // function
-	{'m', tm_tag_class_t},     // module
+	{'m', tm_tag_namespace_t}, // module
 	{'n', tm_tag_variable_t},  // net
-	{'p', tm_tag_variable_t},  // port
+	{'p', tm_tag_externvar_t}, // port
 	{'r', tm_tag_variable_t},  // register
 	{'t', tm_tag_function_t},  // task
-	{'b', tm_tag_undef_t},     // block
-	{'i', tm_tag_undef_t},     // instance
-	// SystemVerilog only (currently unused)
-	{'A', tm_tag_undef_t},     // assert
-	{'C', tm_tag_undef_t},     // class
-	{'V', tm_tag_undef_t},     // covergroup
-	{'E', tm_tag_undef_t},     // enum
-	{'I', tm_tag_undef_t},     // interface
-	{'M', tm_tag_undef_t},     // modport
-	{'K', tm_tag_undef_t},     // package
-	{'P', tm_tag_undef_t},     // program
-	{'Q', tm_tag_undef_t},     // prototype
-	{'R', tm_tag_undef_t},     // property
-	{'S', tm_tag_undef_t},     // struct
-	{'T', tm_tag_undef_t},     // typedef
-	{'H', tm_tag_undef_t},     // checker
-	{'L', tm_tag_undef_t},     // clocking
-	{'q', tm_tag_undef_t},     // sequence
-	{'w', tm_tag_undef_t},     // member
-	{'l', tm_tag_undef_t},     // ifclass
-	{'O', tm_tag_undef_t},     // constraint
-	{'N', tm_tag_undef_t},     // nettype
+	{'b', tm_tag_undef_t},/**/ // block
+	{'i', tm_tag_union_t},     // instance
+	// SystemVerilog only
+	{'A', tm_tag_undef_t},/**/ // assert
+	{'C', tm_tag_class_t},     // class
+	{'V', tm_tag_undef_t},/**/ // covergroup
+	{'E', tm_tag_enum_t},      // enum
+	{'I', tm_tag_interface_t}, // interface (definition of an I/O bundle)
+	{'M', tm_tag_undef_t},/**/ // modport
+	{'K', tm_tag_package_t},   // package
+	{'P', tm_tag_namespace_t}, // program
+	{'Q', tm_tag_undef_t},/**/ // prototype
+	{'R', tm_tag_undef_t},/**/ // property
+	{'S', tm_tag_struct_t},    // struct
+	{'T', tm_tag_typedef_t},   // typedef
+	{'H', tm_tag_undef_t},/**/ // checker
+	{'L', tm_tag_undef_t},/**/ // clocking
+	{'q', tm_tag_undef_t},/**/ // sequence
+	{'w', tm_tag_member_t},    // member
+	{'l', tm_tag_class_t},     // ifclass (SV equivalent of a Java interface)
+	{'O', tm_tag_undef_t},/**/ // constraint
+	{'N', tm_tag_undef_t},/**/ // nettype
+	
+	// TODO: decide most fitting categories for each
 };
 static TMParserMapGroup group_SYSVERILOG[] = {
-	{N_("Events"), TM_ICON_MACRO, tm_tag_typedef_t},
-	{N_("Modules"), TM_ICON_CLASS, tm_tag_class_t},
+	// Verilog and SystemVerilog
+	{N_("Modules"), TM_ICON_CLASS, tm_tag_namespace_t},
+	{N_("Instances"), TM_ICON_OTHER, tm_tag_union_t},
 	{N_("Functions / Tasks"), TM_ICON_METHOD, tm_tag_function_t},
-	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+	{N_("Macros"), TM_ICON_MACRO, tm_tag_macro_t},
+	{N_("Constants"), TM_ICON_MACRO, tm_tag_field_t},
+	{N_("Ports"), TM_ICON_MEMBER, tm_tag_externvar_t},
+	{N_("Signals"), TM_ICON_VAR, tm_tag_variable_t},
+	// SystemVerilog only
+	{N_("Classes"), TM_ICON_STRUCT, tm_tag_class_t},
+	{N_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
+	{N_("Package"), TM_ICON_NAMESPACE, tm_tag_package_t},
+	{N_("Members"), TM_ICON_MEMBER, tm_tag_member_t},
+	{N_("Structs"), TM_ICON_STRUCT, tm_tag_struct_t},
+	{N_("Typedefs / Enums"), TM_ICON_STRUCT, tm_tag_typedef_t | tm_tag_enum_t},
+	
+	// TODO: complete; find proper classification/icons
 };
+// TODO: use same group for VERILOG and SYSVERILOG for consistency (or at least same icons).
+// (map has to be different since different num of elements)
 
 static TMParserMapEntry map_R[] = {
 	{'f', tm_tag_function_t},  // function
